@@ -1,6 +1,10 @@
 from boto3 import client
+from cv2 import VideoCapture, imwrite
+from datetime import datetime
 import yaml
 from typing import Dict
+import pyautogui
+import os
 
 
 
@@ -51,6 +55,37 @@ class Collector:
         )
         credentials = cred_response['Credentials']
         return credentials
+    
+    def capture_state_and_upload(self):
+        photo_path = self.take_photo()
+        screen_shot_path = self.screen_shot()
+        photo_response = self.upload_file(photo_path)
+        screen_shot_response = self.upload_file(screen_shot_path)
+        return (photo_response, screen_shot_response)
+    
+    def upload_file(self, file_path: str) -> Dict:
+        response = self.s3.upload_file(
+            Filename=file_path,
+            Bucket=self.config['BUCKET_NAME'],
+            Key=file_path.split('/')[-1]
+        )
+        return response
+    
+    def take_photo(self) -> str:
+        cap = VideoCapture(0)
+        ret, frame = cap.read()
+        cur_time = datetime.now().strftime('%Y-%m-%d-%H_%M_%S')
+        file_path = os.path.join(self.config['PHOTO_DIR'], f'photo_{cur_time}.jpg')
+        imwrite(file_path, frame)
+        cap.release()
+        return file_path
+    
+    def screen_shot(self) -> str:
+        pic = pyautogui.screenshot()
+        cur_time = datetime.now().strftime('%Y-%m-%d-%H_%M_%S')
+        file_path = os.path.join(self.config['SCREEN_SHOT_DIR'], f'screenshot_{cur_time}.png')
+        pic.save(file_path)
+        return file_path
     
     @property
     def s3(self):
