@@ -5,9 +5,8 @@ from typing import Dict
 
 
 class Collector:
-    def __init__(self, config_file_path: str):
-        with open(config_file_path, 'r') as f:
-            self.config = yaml.load(f, Loader=yaml.FullLoader)
+    def __init__(self, config: Dict):
+        self.config = config
         self._credentials = None
         self._s3 = None
     
