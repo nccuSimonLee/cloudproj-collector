@@ -46,5 +46,5 @@ class Sleeper(Thread):
             time.sleep(self.sleep_time)
             photo_path, screen_shot_path = self.capturer.capture_status()
             if self.collector is not None:
-                response = self.collector.upload_file(photo_path)
-                response = self.collector.upload_file(screen_shot_path)
+                response = self.collector.upload_file(photo_path, 'photo')
+                response = self.collector.upload_file(screen_shot_path, 'screen_shot')

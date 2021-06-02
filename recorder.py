@@ -87,6 +87,6 @@ class Listener(keyboard.Listener):
             if key.ctrl:
                 self.recorder.stop()
                 if self.collector is not None:
-                    self.collector.upload_file(self.file_path)
+                    self.collector.upload_file(self.file_path, 'record')
         elif isinstance(key, keyboard.KeyCode): #alphanumeric key event
             pass
