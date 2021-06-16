@@ -1,0 +1,16 @@
+COLLECTOR:
+  IDENTITY_POOL_ID: 'us-east-1:58ba703a-5123-40ff-9e37-ae01dbec88fd'
+  CLIENT_ID: '7kkf3loqtpc8gap8712vqph249'
+  USER_POOL_ID: 'us-east-1_zM2ptiOnc'
+  REGION: 'us-east-1'
+  PHOTO_BUCKET_NAME: 'collector-image'
+  SCREENSHOT_BUCKET_NAME: 'collector-screenshot'
+  RECORD_BUCKET_NAME: 'collector-record'
+
+RECORD:
+  RECORD_DIR: 'tmp/record/'
+
+STATUS:
+  PHOTO_DIR: 'tmp/photo/'
+  SCREEN_SHOT_DIR: 'tmp/screen_shot/'
+  SLEEP_TIME: 30
