@@ -3,6 +3,7 @@ from cv2 import VideoCapture, imwrite
 import pyautogui
 import time
 from utils import get_file_path
+import requests
 
 
 class Capturer:
@@ -46,5 +47,20 @@ class Sleeper(Thread):
             time.sleep(self.sleep_time)
             photo_path, screen_shot_path = self.capturer.capture_status()
             if self.collector is not None:
-                response = self.collector.upload_file(photo_path, 'photo')
-                response = self.collector.upload_file(screen_shot_path, 'screen_shot')
+                photo_bucket, photo_key = self.collector.upload_file(photo_path, 'photo')
+                ss_bucket, ss_key = self.collector.upload_file(screen_shot_path, 'screen_shot')
+                print('uploaded photo and screenshot')
+                response = requests.post(
+                    url='https://3w95yva4t1.execute-api.us-east-1.amazonaws.com/focus_judger',
+                    json={
+                        'username': self.collector.username,
+                        'photo': {
+                            'bucket_name': photo_bucket,
+                            'key': photo_key
+                        },
+                        'screenshot': {
+                            'bucket_name': ss_bucket,
+                            'key': ss_key
+                        }
+                    }
+                )

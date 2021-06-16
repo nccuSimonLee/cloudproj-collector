@@ -16,6 +16,10 @@ class Collector:
             'record': self.config['RECORD_BUCKET_NAME'],
         }
     
+    @property
+    def username(self):
+        return self._username
+    
     def login(
         self,
         username: str,
@@ -60,12 +64,14 @@ class Collector:
 
     
     def upload_file(self, file_path: str, file_type: str) -> Dict:
-        response = self.s3.upload_file(
+        bucket_name = self._type_to_bucket[file_type]
+        key = f'{self._username}/{file_path.split("/")[-1]}'
+        self.s3.upload_file(
             Filename=file_path,
-            Bucket=self._type_to_bucket[file_type],
-            Key=f'{self._username}/{file_path.split("/")[-1]}'
+            Bucket=bucket_name,
+            Key=key
         )
-        return response
+        return (bucket_name, key)
 
     
     @property
