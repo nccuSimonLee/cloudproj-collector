@@ -4,6 +4,7 @@ import pyautogui
 import time
 from utils import get_file_path
 import requests
+import PIL
 
 
 class Capturer:
@@ -31,6 +32,7 @@ class Capturer:
     def screen_shot(self) -> str:
         pic = pyautogui.screenshot()
         file_path = get_file_path('png', 'screenshot', self.screen_shot_dir)
+        pic = pic.resize((2048, 1024), PIL.Image.ANTIALIAS)
         pic.save(file_path)
         return file_path
 
